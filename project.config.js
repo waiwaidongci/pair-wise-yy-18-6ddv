@@ -23,7 +23,8 @@ module.exports = {
       defaultStatus: '待处理',
       statuses: ['待处理', '补漆中', '换线中', '修机关中', '换眼珠中', '试演中', '已完成'],
       required: ['puppetHeadId', 'repairType', 'handler'],
-      titleFields: ['repairType', 'handler']
+      titleFields: ['repairType', 'handler'],
+      defaults: { partIds: [] }
     },
     tourBoxes: {
       label: '巡演装箱单',
@@ -66,10 +67,77 @@ module.exports = {
         play: '火焰山',
         boxNo: '配件箱-02'
       }
+    },
+    {
+      collection: 'puppetHeads',
+      id: 'head-seed-2',
+      status: '修补中',
+      data: {
+        role: '老生',
+        play: '火焰山',
+        paintStatus: '髯口处脱漆',
+        mechanism: '转眼机关正常',
+        accessories: ['相貂', '蟒'],
+        boxNo: '木箱乙-05',
+        currentUsable: false
+      },
+      eventAction: '修补开单',
+      note: '开单修补髯口脱漆'
+    },
+    {
+      collection: 'accessories',
+      id: 'accessory-seed-2',
+      status: '在库',
+      data: {
+        name: '短靠',
+        role: '武生',
+        play: '火焰山',
+        boxNo: '配件箱-02'
+      }
+    },
+    {
+      collection: 'accessories',
+      id: 'accessory-seed-3',
+      status: '在库',
+      data: {
+        name: '雉鸡翎',
+        role: '武生',
+        play: '大闹天宫',
+        boxNo: '配件箱-03'
+      }
+    },
+    {
+      collection: 'accessories',
+      id: 'accessory-seed-4',
+      status: '缺损',
+      data: {
+        name: '旧靠旗',
+        role: '武生',
+        play: '火焰山',
+        boxNo: '配件箱-02'
+      },
+      note: '返场清点发现旗面破损'
+    },
+    {
+      collection: 'repairRecords',
+      id: 'repair-seed-1',
+      status: '补漆中',
+      data: {
+        puppetHeadId: 'head-seed-2',
+        repairType: '补漆',
+        handler: '陈师傅',
+        partIds: ['accessory-seed-2']
+      },
+      eventAction: '开单领用',
+      note: '领用短靠比对补漆'
     }
   ],
   examples: [
     'GET /api/puppetHeads?play=火焰山&status=可演出 查询某剧目可用偶头',
+    'POST /api/repairs 修补开单并领用配件（同剧目、在库、未被占用；冲突则整单不保存）',
+    'GET /api/repairs/availability?play=火焰山 查看配件占用与可领用状态',
+    'POST /api/repairs/:id/parts 更换配件，旧占用自动释放、过往处理留档',
+    'POST /api/repairs/:id/close 关单登记复原结果：通过则配件回库偶头可演出，新问题则转待修补',
     'POST /api/tourBoxes 创建巡演装箱单',
     'POST /api/lossReports 登记返场缺损或遗失'
   ]
