@@ -14,7 +14,7 @@ module.exports = {
     accessories: {
       label: '服装配件',
       defaultStatus: '在库',
-      statuses: ['在库', '已装箱', '缺损', '遗失'],
+      statuses: ['在库', '修补领用', '已装箱', '缺损', '遗失'],
       required: ['name', 'role', 'play', 'boxNo'],
       titleFields: ['name', 'role']
     },
@@ -66,10 +66,36 @@ module.exports = {
         play: '火焰山',
         boxNo: '配件箱-02'
       }
+    },
+    {
+      collection: 'accessories',
+      id: 'accessory-seed-2',
+      status: '在库',
+      data: {
+        name: '短靠',
+        role: '武生',
+        play: '火焰山',
+        boxNo: '配件箱-02'
+      }
+    },
+    {
+      collection: 'accessories',
+      id: 'accessory-seed-3',
+      status: '在库',
+      data: {
+        name: '凤冠',
+        role: '旦角',
+        play: '牡丹亭',
+        boxNo: '配件箱-05'
+      }
     }
   ],
   examples: [
     'GET /api/puppetHeads?play=火焰山&status=可演出 查询某剧目可用偶头',
+    'POST /api/repairRecords/open 开修补单并领用配件（偶头+配件同剧目且在库，冲突整单不保存）',
+    'POST /api/repairRecords/:id/swap-accessory 换配件（旧占用释放，新件占用，过往留档）',
+    'POST /api/repairRecords/:id/close 关单登记复原结果（通过回库恢复演出；新问题转待修补继续占件）',
+    'GET /api/accessories/:id/occupancy 查询配件被哪张未结修补单占用',
     'POST /api/tourBoxes 创建巡演装箱单',
     'POST /api/lossReports 登记返场缺损或遗失'
   ]
